@@ -7,18 +7,18 @@ import { AlertService, AuthenticationService } from '../_services';
 
 @Component({
   // selector: 'app-login',
-  templateUrl: 'login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: 'login.component.html'
+  // styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loadin = false;
+  loading = false;
   submitted = false;
   returnUrl: string;
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivateRoute,
+    private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
     private alertService: AlertService
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     .pipe(first())
     .subscribe(
       data => {
-        this.router.navigate(['this.returnUrl']);
+        this.router.navigate([this.returnUrl]);
       },
       error => {
         this.alertService.error(error);
