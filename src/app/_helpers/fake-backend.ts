@@ -15,7 +15,7 @@ export class FakeBackendInterceptor implements HttpInterceptor{
     return of(null)
     .pipe(mergeMap(handleRoute))
     .pipe(materialize())
-    .pipe(delay(500)
+    .pipe(delay(500))
     .pipe(dematerialize());
 
     function handleRoute(){
@@ -50,6 +50,57 @@ export class FakeBackendInterceptor implements HttpInterceptor{
         token: 'fake-jwt-token',
       })
     }
-    
+    function register(){
+      const user = body;
+      if(users.find(x => x.username === user.username )){
+        return error('Username "'+user.username+'" is already taken');
+      }
+
+      user.id = users.length ? Math.max(...users.map(x => x.id)) +1:1;
+      users.push(user);
+      localStorage.setItem('users',JSON.stringify(users));
+      return ok();
+    }
+
+    function getUsers(){
+      if(!isLoggedIn()) return unauthorized();
+      return ok(users);
+    }
+
+    function deleteUser(){
+      if(!isLoggedIn()) return unauthorized();
+
+      users = users.filter(x => x.id !== idFromUrl());
+      localStorage.setItem('users',JSON.stringify(users));
+      return ok();
+    }
+
+    function ok(body?){
+      return of(new HttpResponse({status:200, body}))
+    }
+
+    function error(message){
+      return throwError({ error: { message }});
+    }
+
+    function unauthorized(){
+      return throwError({ status: 401, error: { message: 'Unauthorized'}});
+    }
+
+    function isLoggedIn(){
+      return headers.get('Authorization') === 'Bearer fake-jwt-token';
+    }
+
+    function idFromUrl(){
+      const urlParts = url.split('/');
+      return parseInt(urlParts[urlParts.length-1]);
+    }
   }
 }
+
+export const fakeBackendProvider = {
+  //use fake backend instead of http backend service
+  provide: HTTP_INTERCEPTORS,
+  useClass: FakeBackendInterceptor,
+  multi: true
+};
