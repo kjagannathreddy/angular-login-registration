@@ -15,8 +15,18 @@ import { RegisterComponent } from './register';
 import { AlertComponent } from './_components';
 
 @NgModule({
-  imports:      [ BrowserModule, ReactiveFormsModule, HttpClientModule, appRoutingModule ],
-  declarations: [ AppComponent, HomeComponent, LoginComponent, RegisterComponent, AlertComponent ],
+  imports:      [
+     BrowserModule,
+     ReactiveFormsModule,
+     HttpClientModule,
+     appRoutingModule
+     ],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    AlertComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass:JwtInterceptor, multi:true },
     { provide: HTTP_INTERCEPTORS, useClass:ErrorInterceptor, multi:true },
