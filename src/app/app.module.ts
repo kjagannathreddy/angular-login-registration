@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 //fake backend
 import { fakeBackendProvider } from './_helpers';
 
-import { appRoutingModule } from './app/routing';
+import { appRoutingModule } from './app.routing';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 
 import { AppComponent } from './app.component';
